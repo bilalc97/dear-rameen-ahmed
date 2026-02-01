@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Rameen ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital@0;1&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8d5d5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .rose-petals {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .petal {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(ellipse at center, #ff69b4, #ff1493);
+            border-radius: 50% 0 50% 0;
+            opacity: 0.6;
+            animation: petalFall 12s infinite ease-in;
+            z-index: 1;
+        }
+
+        .falling-item {
+            position: absolute;
+            opacity: 0.7;
+            animation: itemFall 20s infinite linear;
+            z-index: 100;
+        }
+
+        .falling-item.image {
+            width: 240px;
+            height: 240px;
+            object-fit: contain;
+            mix-blend-mode: multiply;
+        }
+
+        .falling-item.emoji {
+            font-size: 10em;
+        }
+
+        @keyframes petalFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes itemFall {
+            0% {
+                transform: translateY(-100px);
+                opacity: 1;
+            }
+            85% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 70px 60px;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(139, 69, 19, 0.2);
+            max-width: 600px;
+            width: 90%;
+            border: 1px solid rgba(139, 69, 19, 0.2);
+        }
+
+        .ornament {
+            color: #8b4513;
+            font-size: 3em;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .title-heart {
+            font-size: 4em;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            color: #8b4513;
+            font-size: 4em;
+            margin-bottom: 50px;
+            font-weight: normal;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-style: italic;
+            color: #a0826d;
+            font-size: 1.1em;
+            margin-bottom: 40px;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 18px 60px;
+            font-size: 1.2em;
+            font-weight: normal;
+            border: 2px solid #8b4513;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            min-width: 200px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+        }
+
+        #yesBtn {
+            background: #8b4513;
+            color: white;
+        }
+
+        #yesBtn:hover {
+            background: #a0522d;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(139, 69, 19, 0.3);
+        }
+
+        #noBtn {
+            background: white;
+            color: #8b4513;
+            position: relative;
+            width: 250px;
+            transition: left 0.3s ease, top 0.3s ease;
+            z-index: 1000;
+        }
+
+        #noBtn.floating {
+            position: fixed;
+            width: 250px;
+            z-index: 1000;
+        }
+
+        .congratulations {
+            display: none;
+        }
+
+        .congratulations.active {
+            display: block;
+            animation: fadeIn 2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .celebration-hearts {
+            font-size: 4em;
+            margin-bottom: 30px;
+        }
+
+        .celebration-title {
+            font-family: 'Great Vibes', cursive;
+            color: #8b4513;
+            font-size: 4.5em;
+            margin-bottom: 30px;
+            font-weight: normal;
+        }
+
+        .celebration {
+            font-size: 1.3em;
+            color: #a0826d;
+            line-height: 2;
+            font-style: italic;
+        }
+
+        .couple-photo {
+            width: 300px;
+            max-width: 80%;
+            border-radius: 10px;
+            border: 3px solid #8b4513;
+            box-shadow: 0 10px 30px rgba(139, 69, 19, 0.3);
+            margin: 30px auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="rose-petals" id="rosePetals"></div>
+
+    <div class="container">
+        <div class="ornament">❦</div>
+        <div id="question">
+            <div class="title-heart">🌹</div>
+            <p class="subtitle">A question from the heart</p>
+            <h1>Will you be my Valentine?</h1>
+            <div class="button-container">
+                <button id="yesBtn">With pleasure</button>
+                <button id="noBtn">Perhaps not</button>
+            </div>
+        </div>
+
+        <div id="congratulations" class="congratulations">
+            <div class="celebration-hearts">🌹💕🌹</div>
+            <h1 class="celebration-title">How Wonderful</h1>
+            <p class="celebration">
+                Your answer brings me such joy<br>
+                You are truly remarkable<br>
+                I can't wait to marry you
+            </p>
+            <img src="bilal-rameen.png" alt="Us" class="couple-photo">
+        </div>
+        <div class="ornament" style="transform: rotate(180deg);">❦</div>
+    </div>
+
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const question = document.getElementById('question');
+        const congratulations = document.getElementById('congratulations');
+        const rosePetals = document.getElementById('rosePetals');
+
+        const noMessages = [
+            "You sure? You liked me first remember 😏📱",
+            "Are you quite sure? 🥺",
+            "Don't break my heart 💔",
+            "Please reconsider 😢",
+            "I already put a ring on it 💍"
+        ];
+
+        let noClickCount = 0;
+
+        // Array of falling items
+        const fallingImages = [
+            'black-dress.png',
+            'camera.png',
+            'canada-flag.png',
+            'coffee-cup.png',
+            'latte-drink.png',
+            'madewell-entrance.png',
+            'milton-water-tower.png',
+            'polene-bag.png',
+            'ramen-bowl.png',
+            'ring.png',
+            'tiramisu.png'
+        ];
+
+        const fallingEmojis = [];
+
+        // Create a rotating list of all items (images + emojis)
+        const allItems = [
+            ...fallingImages.map(img => ({ type: 'image', value: img })),
+            ...fallingEmojis.map(emoji => ({ type: 'emoji', value: emoji }))
+        ];
+
+        let currentItemIndex = 0;
+        let currentLane = 0; // Track which lane (0-5) should get next item
+
+        // Track how many of each item is currently falling
+        const itemCounts = {};
+        const itemLanes = {}; // Track which lanes each item is on: { itemKey: [lane0, lane1, ...] }
+        fallingImages.forEach(img => {
+            itemCounts[img] = 0;
+            itemLanes[img] = [];
+        });
+        fallingEmojis.forEach(emoji => {
+            itemCounts[emoji] = 0;
+            itemLanes[emoji] = [];
+        });
+
+        // Get position within a specific lane
+        // Lanes 0-2 are on left side, lanes 3-5 are on right side
+        function getLanePosition(lane) {
+            const laneWidth = 10; // Each lane is 10% wide
+            let laneStart;
+
+            if (lane < 3) {
+                // Left side lanes (0-2): 0-10%, 10-20%, 20-30%
+                laneStart = lane * laneWidth;
+            } else {
+                // Right side lanes (3-5): 70-80%, 80-90%, 90-100%
+                laneStart = 70 + ((lane - 3) * laneWidth);
+            }
+
+            return laneStart + (Math.random() * laneWidth);
+        }
+
+        // Create rose petals
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            const duration = 8 + Math.random() * 8;
+
+            petal.style.left = Math.random() * 100 + '%';
+            petal.style.top = '-300px';
+            petal.style.animationDuration = duration + 's';
+            rosePetals.appendChild(petal);
+
+            setTimeout(() => {
+                petal.remove();
+            }, duration * 1000 + 500);
+        }
+
+        // Create falling PNG/emoji items
+        function createFallingItem() {
+            let item;
+            let duration;
+            let itemKey;
+
+            // Cycle through images and emojis in order
+            let attempts = 0;
+            while (attempts < allItems.length) {
+                const currentItem = allItems[currentItemIndex];
+                currentItemIndex = (currentItemIndex + 1) % allItems.length;
+
+                // Check if this item can be created (not at max count)
+                if (itemCounts[currentItem.value] < 2) {
+                    if (currentItem.type === 'image') {
+                        item = document.createElement('img');
+                        item.src = currentItem.value;
+                        item.className = 'falling-item image';
+                        itemKey = currentItem.value;
+                        duration = 15 + Math.random() * 10;
+                    } else {
+                        item = document.createElement('div');
+                        item.textContent = currentItem.value;
+                        item.className = 'falling-item emoji';
+                        itemKey = currentItem.value;
+                        duration = 15 + Math.random() * 10;
+                    }
+                    break;
+                }
+                attempts++;
+            }
+
+            // Only create if we found an available item
+            if (item && itemKey) {
+                itemCounts[itemKey]++;
+
+                // Determine which lane to spawn on
+                let spawnLane;
+                const lanes = itemLanes[itemKey];
+
+                // Check if item is only on left side (lanes 0-2) or right side (lanes 3-5)
+                const onLeftSide = lanes.some(l => l < 3);
+                const onRightSide = lanes.some(l => l >= 3);
+
+                if (lanes.length === 0) {
+                    // No instances of this item, use regular lane rotation
+                    spawnLane = currentLane;
+                    currentLane = (currentLane + 1) % 6;
+                } else if (onLeftSide && !onRightSide) {
+                    // Already on left side only, spawn on right side
+                    // Choose a random right lane (3-5)
+                    spawnLane = 3 + Math.floor(Math.random() * 3);
+                } else if (onRightSide && !onLeftSide) {
+                    // Already on right side only, spawn on left side
+                    // Choose a random left lane (0-2)
+                    spawnLane = Math.floor(Math.random() * 3);
+                } else {
+                    // On both sides, use regular lane rotation
+                    spawnLane = currentLane;
+                    currentLane = (currentLane + 1) % 6;
+                }
+
+                // Track this item on this lane
+                itemLanes[itemKey].push(spawnLane);
+
+                // Place item in determined lane
+                item.style.left = getLanePosition(spawnLane) + '%';
+                item.style.top = '-300px';
+                item.style.animationDuration = duration + 's';
+                rosePetals.appendChild(item);
+
+                setTimeout(() => {
+                    item.remove();
+                    itemCounts[itemKey]--;
+                    // Remove this lane from tracking
+                    const laneIndex = itemLanes[itemKey].indexOf(spawnLane);
+                    if (laneIndex > -1) {
+                        itemLanes[itemKey].splice(laneIndex, 1);
+                    }
+                }, duration * 1000 + 500);
+            }
+        }
+
+        // Create initial petals
+        for (let i = 0; i < 3; i++) {
+            createPetal();
+        }
+
+        // Create initial PNG items
+        for (let i = 0; i < 3; i++) {
+            createFallingItem();
+        }
+
+        // Spawn petals every 400ms
+        setInterval(createPetal, 400);
+
+        // Spawn PNG items every 800ms
+        setInterval(createFallingItem, 800);
+
+        function moveNoButton() {
+            const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+            const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+            const randomX = Math.max(20, Math.random() * maxX);
+            const randomY = Math.max(20, Math.random() * maxY);
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        yesBtn.addEventListener('click', () => {
+            question.style.display = 'none';
+            noBtn.style.display = 'none';
+            congratulations.classList.add('active');
+        });
+
+        noBtn.addEventListener('click', () => {
+            const messageIndex = noClickCount % noMessages.length;
+            noBtn.textContent = noMessages[messageIndex];
+            noClickCount++;
+
+            // If first click, capture current position before switching to fixed
+            if (!noBtn.classList.contains('floating')) {
+                const rect = noBtn.getBoundingClientRect();
+                noBtn.style.left = rect.left + 'px';
+                noBtn.style.top = rect.top + 'px';
+                noBtn.classList.add('floating');
+
+                // Use setTimeout to allow the position to be set before moving
+                setTimeout(() => {
+                    moveNoButton();
+                }, 10);
+            } else {
+                moveNoButton();
+            }
+        });
+    </script>
+</body>
+</html>
