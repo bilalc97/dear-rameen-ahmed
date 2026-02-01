@@ -550,14 +550,14 @@
         // Get position within a specific lane
         // Lanes 0-2 are on left side, lanes 3-5 are on right side
         function getLanePosition(lane) {
-            const laneWidth = 8; // Each lane is 8% wide
+            const laneWidth = 7; // Each lane is 7% wide
             let laneStart;
 
             if (lane < 3) {
-                // Left side lanes (0-2): 5-13%, 13-21%, 21-29%
-                laneStart = 5 + (lane * laneWidth);
+                // Left side lanes (0-2): 8-15%, 15-22%, 22-29%
+                laneStart = 8 + (lane * laneWidth);
             } else {
-                // Right side lanes (3-5): 71-79%, 79-87%, 87-95%
+                // Right side lanes (3-5): 71-78%, 78-85%, 85-92%
                 laneStart = 71 + ((lane - 3) * laneWidth);
             }
 
@@ -570,8 +570,8 @@
             petal.className = 'petal';
             const duration = 8 + Math.random() * 8;
 
-            // Petals are small, but still avoid extreme edges
-            petal.style.left = (2 + Math.random() * 96) + '%';
+            // Petals are small, can be closer to edges
+            petal.style.left = (3 + Math.random() * 94) + '%';
             petal.style.top = '-300px';
             petal.style.animationDuration = duration + 's';
             rosePetals.appendChild(petal);
@@ -648,8 +648,8 @@
 
                 // Place item - use full width if minimized, otherwise use lanes
                 if (isMinimized) {
-                    // When minimized, use 5-95% to prevent edge cutoff
-                    item.style.left = (5 + Math.random() * 90) + '%';
+                    // When minimized, use 8-92% to prevent excessive edge cutoff
+                    item.style.left = (8 + Math.random() * 84) + '%';
                 } else {
                     item.style.left = getLanePosition(spawnLane) + '%';
                 }
