@@ -559,35 +559,50 @@
         ];
 
         let currentItemIndex = 0;
-        let currentLane = 0; // Track which lane (0-5) should get next item
         let isMinimized = false; // Track if container is minimized
 
         // Track how many of each item is currently falling
         const itemCounts = {};
-        const itemLanes = {}; // Track which lanes each item is on: { itemKey: [lane0, lane1, ...] }
+        // Track which side each item is on: 'left', 'right', or null
+        const itemSide = {};
         fallingImages.forEach(img => {
             itemCounts[img] = 0;
-            itemLanes[img] = [];
+            itemSide[img] = null;
         });
         fallingEmojis.forEach(emoji => {
             itemCounts[emoji] = 0;
-            itemLanes[emoji] = [];
+            itemSide[emoji] = null;
         });
 
-        // Get position within a specific lane
-        // Lanes 0-2 are on left side, lanes 3-5 are on right side
-        function getLanePosition(lane) {
-            const laneWidth = 7; // Each lane is 7% wide
-            let laneStart;
+        // Shuffled lane queue for even distribution
+        let laneQueue = [];
 
-            if (lane < 3) {
-                // Left side lanes (0-2): 8-15%, 15-22%, 22-29%
-                laneStart = 8 + (lane * laneWidth);
-            } else {
-                // Right side lanes (3-5): 71-78%, 78-85%, 85-92%
-                laneStart = 71 + ((lane - 3) * laneWidth);
+        function shuffleLanes() {
+            // Only use lanes on the sides (0, 1 on left; 4, 5 on right)
+            // Avoiding lanes 2, 3 which would appear behind the white box
+            laneQueue = [0, 1, 4, 5];
+            // Fisher-Yates shuffle
+            for (let i = laneQueue.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [laneQueue[i], laneQueue[j]] = [laneQueue[j], laneQueue[i]];
             }
+        }
 
+        function getNextLane() {
+            if (laneQueue.length === 0) {
+                shuffleLanes();
+            }
+            return laneQueue.pop();
+        }
+
+        // Initialize the lane queue
+        shuffleLanes();
+
+        // Get position within a specific lane
+        // 6 lanes spread evenly across the full screen width
+        function getLanePosition(lane) {
+            const laneWidth = 16; // Each lane is ~16% wide
+            const laneStart = lane * laneWidth;
             return laneStart + (Math.random() * laneWidth);
         }
 
@@ -662,42 +677,26 @@
             if (item && itemKey) {
                 itemCounts[itemKey]++;
 
-                // Determine which lane to spawn on
+                // Determine which side to spawn on based on where this item currently is
                 let spawnLane;
-                const lanes = itemLanes[itemKey];
+                const currentSide = itemSide[itemKey];
 
-                // Check if item is only on left side (lanes 0-2) or right side (lanes 3-5)
-                const onLeftSide = lanes.some(l => l < 3);
-                const onRightSide = lanes.some(l => l >= 3);
-
-                if (lanes.length === 0) {
-                    // No instances of this item, use regular lane rotation
-                    spawnLane = currentLane;
-                    currentLane = (currentLane + 1) % 6;
-                } else if (onLeftSide && !onRightSide) {
-                    // Already on left side only, spawn on right side
-                    // Choose a random right lane (3-5)
-                    spawnLane = 3 + Math.floor(Math.random() * 3);
-                } else if (onRightSide && !onLeftSide) {
-                    // Already on right side only, spawn on left side
-                    // Choose a random left lane (0-2)
-                    spawnLane = Math.floor(Math.random() * 3);
+                if (currentSide === 'left') {
+                    // Item is on left, spawn on right (lanes 4, 5)
+                    spawnLane = Math.random() < 0.5 ? 4 : 5;
+                    itemSide[itemKey] = 'right';
+                } else if (currentSide === 'right') {
+                    // Item is on right, spawn on left (lanes 0, 1)
+                    spawnLane = Math.random() < 0.5 ? 0 : 1;
+                    itemSide[itemKey] = 'left';
                 } else {
-                    // On both sides, use regular lane rotation
-                    spawnLane = currentLane;
-                    currentLane = (currentLane + 1) % 6;
+                    // No current instance, use shuffled queue
+                    spawnLane = getNextLane();
+                    itemSide[itemKey] = (spawnLane <= 1) ? 'left' : 'right';
                 }
 
-                // Track this item on this lane
-                itemLanes[itemKey].push(spawnLane);
-
-                // Place item - use full width if minimized, otherwise use lanes
-                if (isMinimized) {
-                    // When minimized, use 8-92% to prevent excessive edge cutoff
-                    item.style.left = (8 + Math.random() * 84) + '%';
-                } else {
-                    item.style.left = getLanePosition(spawnLane) + '%';
-                }
+                // Place item using lane position
+                item.style.left = getLanePosition(spawnLane) + '%';
                 item.style.top = '-300px';
                 item.style.animationDuration = duration + 's';
                 rosePetals.appendChild(item);
@@ -705,10 +704,9 @@
                 setTimeout(() => {
                     item.remove();
                     itemCounts[itemKey]--;
-                    // Remove this lane from tracking
-                    const laneIndex = itemLanes[itemKey].indexOf(spawnLane);
-                    if (laneIndex > -1) {
-                        itemLanes[itemKey].splice(laneIndex, 1);
+                    // Reset side tracking when no instances remain
+                    if (itemCounts[itemKey] === 0) {
+                        itemSide[itemKey] = null;
                     }
                 }, duration * 1000 + 500);
             }
