@@ -76,6 +76,11 @@
             height: 135px;
         }
 
+        .falling-item.image.tiny {
+            width: 100px;
+            height: 100px;
+        }
+
         .falling-item.emoji {
             font-size: 10em;
         }
@@ -424,6 +429,11 @@
                 height: 84px;
             }
 
+            .falling-item.image.tiny {
+                width: 65px;
+                height: 65px;
+            }
+
             .falling-item.emoji {
                 font-size: 6em;
             }
@@ -504,6 +514,11 @@
             .falling-item.image.extra-small {
                 width: 68px;
                 height: 68px;
+            }
+
+            .falling-item.image.tiny {
+                width: 50px;
+                height: 50px;
             }
 
             .falling-item.emoji {
@@ -701,8 +716,11 @@
                         item.className = 'falling-item image';
                         // Make certain items smaller
                         const smallerItems = ['tiramisu.png', 'camera.png', 'latte-drink.png', 'coffee-cup.png', 'canada-flag.png', 'madewell-entrance.png'];
-                        const extraSmallItems = ['ring.png', 'polene-bag.png'];
-                        if (extraSmallItems.includes(currentItem.value)) {
+                        const extraSmallItems = ['polene-bag.png'];
+                        const tinyItems = ['ring.png'];
+                        if (tinyItems.includes(currentItem.value)) {
+                            item.className += ' tiny';
+                        } else if (extraSmallItems.includes(currentItem.value)) {
                             item.className += ' extra-small';
                         } else if (smallerItems.includes(currentItem.value)) {
                             item.className += ' smaller';
