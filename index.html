@@ -219,6 +219,92 @@
             display: block;
         }
 
+        /* Minimize/Maximize buttons */
+        .minimize-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(139, 69, 19, 0.1);
+            border: 1px solid rgba(139, 69, 19, 0.3);
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2em;
+            color: #8b4513;
+            z-index: 100;
+        }
+
+        .minimize-btn:hover {
+            background: rgba(139, 69, 19, 0.2);
+            transform: scale(1.1);
+        }
+
+        .maximize-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #8b4513;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.8em;
+            box-shadow: 0 5px 20px rgba(139, 69, 19, 0.4);
+            z-index: 1001;
+        }
+
+        .maximize-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.5);
+        }
+
+        .maximize-btn.visible {
+            display: flex;
+        }
+
+        /* Back button */
+        .back-btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 30px;
+            background: white;
+            color: #8b4513;
+            border: 2px solid #8b4513;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1em;
+        }
+
+        .back-btn:hover {
+            background: rgba(139, 69, 19, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Container animations */
+        .container.minimized {
+            transform: scale(0);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
         /* Mobile Responsive Styles */
         @media (max-width: 768px) {
             body {
@@ -373,6 +459,7 @@
     <div class="rose-petals" id="rosePetals"></div>
 
     <div class="container">
+        <div class="minimize-btn" id="minimizeBtn" title="Minimize">▼</div>
         <div class="ornament">❦</div>
         <div id="question">
             <div class="title-heart">🌹</div>
@@ -393,9 +480,12 @@
                 I can't wait to marry you
             </p>
             <img src="bilal-rameen.png" alt="Us" class="couple-photo">
+            <button class="back-btn" id="backBtn">Back</button>
         </div>
         <div class="ornament" style="transform: rotate(180deg);">❦</div>
     </div>
+
+    <div class="maximize-btn" id="maximizeBtn" title="Show card">▲</div>
 
     <script>
         const yesBtn = document.getElementById('yesBtn');
@@ -403,6 +493,10 @@
         const question = document.getElementById('question');
         const congratulations = document.getElementById('congratulations');
         const rosePetals = document.getElementById('rosePetals');
+        const container = document.querySelector('.container');
+        const minimizeBtn = document.getElementById('minimizeBtn');
+        const maximizeBtn = document.getElementById('maximizeBtn');
+        const backBtn = document.getElementById('backBtn');
 
         const noMessages = [
             "You sure? You liked me first remember 😏📱",
@@ -439,6 +533,7 @@
 
         let currentItemIndex = 0;
         let currentLane = 0; // Track which lane (0-5) should get next item
+        let isMinimized = false; // Track if container is minimized
 
         // Track how many of each item is currently falling
         const itemCounts = {};
@@ -455,15 +550,15 @@
         // Get position within a specific lane
         // Lanes 0-2 are on left side, lanes 3-5 are on right side
         function getLanePosition(lane) {
-            const laneWidth = 10; // Each lane is 10% wide
+            const laneWidth = 8; // Each lane is 8% wide
             let laneStart;
 
             if (lane < 3) {
-                // Left side lanes (0-2): 0-10%, 10-20%, 20-30%
-                laneStart = lane * laneWidth;
+                // Left side lanes (0-2): 5-13%, 13-21%, 21-29%
+                laneStart = 5 + (lane * laneWidth);
             } else {
-                // Right side lanes (3-5): 70-80%, 80-90%, 90-100%
-                laneStart = 70 + ((lane - 3) * laneWidth);
+                // Right side lanes (3-5): 71-79%, 79-87%, 87-95%
+                laneStart = 71 + ((lane - 3) * laneWidth);
             }
 
             return laneStart + (Math.random() * laneWidth);
@@ -475,7 +570,8 @@
             petal.className = 'petal';
             const duration = 8 + Math.random() * 8;
 
-            petal.style.left = Math.random() * 100 + '%';
+            // Petals are small, but still avoid extreme edges
+            petal.style.left = (2 + Math.random() * 96) + '%';
             petal.style.top = '-300px';
             petal.style.animationDuration = duration + 's';
             rosePetals.appendChild(petal);
@@ -550,8 +646,13 @@
                 // Track this item on this lane
                 itemLanes[itemKey].push(spawnLane);
 
-                // Place item in determined lane
-                item.style.left = getLanePosition(spawnLane) + '%';
+                // Place item - use full width if minimized, otherwise use lanes
+                if (isMinimized) {
+                    // When minimized, use 5-95% to prevent edge cutoff
+                    item.style.left = (5 + Math.random() * 90) + '%';
+                } else {
+                    item.style.left = getLanePosition(spawnLane) + '%';
+                }
                 item.style.top = '-300px';
                 item.style.animationDuration = duration + 's';
                 rosePetals.appendChild(item);
@@ -592,6 +693,32 @@
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
         }
+
+        // Minimize/Maximize functionality
+        minimizeBtn.addEventListener('click', () => {
+            container.classList.add('minimized');
+            maximizeBtn.classList.add('visible');
+            isMinimized = true;
+        });
+
+        maximizeBtn.addEventListener('click', () => {
+            container.classList.remove('minimized');
+            maximizeBtn.classList.remove('visible');
+            isMinimized = false;
+        });
+
+        // Back button functionality
+        backBtn.addEventListener('click', () => {
+            congratulations.classList.remove('active');
+            question.style.display = 'block';
+            noBtn.style.display = 'inline-block';
+            noBtn.classList.remove('floating');
+            noBtn.style.position = 'relative';
+            noBtn.style.left = '';
+            noBtn.style.top = '';
+            noBtn.textContent = 'Perhaps not';
+            noClickCount = 0;
+        });
 
         yesBtn.addEventListener('click', () => {
             question.style.display = 'none';
