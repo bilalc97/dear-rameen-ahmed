@@ -43,11 +43,20 @@
             z-index: 1;
         }
 
+        .heart {
+            position: absolute;
+            font-size: 25px;
+            color: #ff0000;
+            opacity: 0.7;
+            animation: heartFall 10s infinite linear;
+            z-index: 1;
+        }
+
         .falling-item {
             position: absolute;
             opacity: 0.7;
             animation: itemFall 20s infinite linear;
-            z-index: 100;
+            z-index: 5;
         }
 
         .falling-item.image {
@@ -68,6 +77,20 @@
             }
             100% {
                 transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes heartFall {
+            0% {
+                transform: translateY(-100px);
+                opacity: 1;
+            }
+            85% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
                 opacity: 0;
             }
         }
@@ -385,10 +408,14 @@
                 font-size: 6em;
             }
 
-            /* Smaller petals on mobile */
+            /* Smaller petals and hearts on mobile */
             .petal {
                 width: 15px;
                 height: 15px;
+            }
+
+            .heart {
+                font-size: 18px;
             }
         }
 
@@ -581,6 +608,24 @@
             }, duration * 1000 + 500);
         }
 
+        // Create red hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = '❤️';
+            const duration = 8 + Math.random() * 6;
+
+            // Hearts are small, can be closer to edges
+            heart.style.left = (3 + Math.random() * 94) + '%';
+            heart.style.top = '-300px';
+            heart.style.animationDuration = duration + 's';
+            rosePetals.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, duration * 1000 + 500);
+        }
+
         // Create falling PNG/emoji items
         function createFallingItem() {
             let item;
@@ -674,6 +719,11 @@
             createPetal();
         }
 
+        // Create initial hearts
+        for (let i = 0; i < 2; i++) {
+            createHeart();
+        }
+
         // Create initial PNG items
         for (let i = 0; i < 3; i++) {
             createFallingItem();
@@ -681,6 +731,9 @@
 
         // Spawn petals every 400ms
         setInterval(createPetal, 400);
+
+        // Spawn hearts every 600ms
+        setInterval(createHeart, 600);
 
         // Spawn PNG items every 800ms
         setInterval(createFallingItem, 800);
