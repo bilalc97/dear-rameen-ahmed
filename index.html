@@ -217,6 +217,143 @@
             margin: 30px auto;
             display: block;
         }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 40px 30px;
+                max-width: 95%;
+            }
+
+            .ornament {
+                font-size: 2em;
+            }
+
+            .title-heart {
+                font-size: 3em;
+                margin-bottom: 20px;
+            }
+
+            h1 {
+                font-size: 2.5em;
+                margin-bottom: 30px;
+            }
+
+            .subtitle {
+                font-size: 0.9em;
+                margin-bottom: 25px;
+            }
+
+            .button-container {
+                gap: 15px;
+                margin-top: 20px;
+            }
+
+            button {
+                padding: 15px 40px;
+                font-size: 1em;
+                min-width: 160px;
+            }
+
+            #noBtn {
+                width: 200px;
+            }
+
+            #noBtn.floating {
+                width: 200px;
+            }
+
+            .celebration-hearts {
+                font-size: 3em;
+                margin-bottom: 20px;
+            }
+
+            .celebration-title {
+                font-size: 3em;
+                margin-bottom: 20px;
+            }
+
+            .celebration {
+                font-size: 1.1em;
+                line-height: 1.8;
+            }
+
+            .couple-photo {
+                width: 250px;
+                margin: 20px auto;
+            }
+
+            /* Smaller falling items on mobile */
+            .falling-item.image {
+                width: 150px;
+                height: 150px;
+            }
+
+            .falling-item.emoji {
+                font-size: 6em;
+            }
+
+            /* Smaller petals on mobile */
+            .petal {
+                width: 15px;
+                height: 15px;
+            }
+        }
+
+        /* Extra small phones */
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .title-heart {
+                font-size: 2.5em;
+            }
+
+            button {
+                padding: 12px 30px;
+                font-size: 0.95em;
+                min-width: 140px;
+            }
+
+            #noBtn {
+                width: 180px;
+            }
+
+            #noBtn.floating {
+                width: 180px;
+            }
+
+            .celebration-title {
+                font-size: 2.5em;
+            }
+
+            .celebration {
+                font-size: 1em;
+            }
+
+            .couple-photo {
+                width: 200px;
+            }
+
+            /* Even smaller falling items on very small screens */
+            .falling-item.image {
+                width: 120px;
+                height: 120px;
+            }
+
+            .falling-item.emoji {
+                font-size: 5em;
+            }
+        }
     </style>
 </head>
 <body>
